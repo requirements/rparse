@@ -27,7 +27,7 @@ vspec : comparison version (',' comparison version)* ;
 comparison : '<' | '<=' | '!=' | '==' | '>=' | '>' | '~=' | '===' ;
 version : string ;
 
-@string : '[-A-Za-z0-9_.]+' ;
+@string : '[-A-Za-z0-9_\.]+' ;
 
 SPACES: '[ \t\n]+' (%ignore) (%newline);
 """)
