@@ -29,7 +29,7 @@ class RParseTestCase(unittest.TestCase):
         redis==1.0
         """
         ast = rparse.parse(requirements)
-        with self.assertRaises(ValueError, message="Invalid requirement: 'flask 0.10.1'"):
+        with self.assertRaises(ValueError, message="Invalid requirements line: 'flask 0.10.1'"):
             next(ast)
         ast = next(ast)
         self.assertEqual(list(ast.select("package > name *")), ["redis"])

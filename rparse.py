@@ -37,7 +37,7 @@ def _parse(requirement, g=grammar):
     try:
         return g.parse(requirement)
     except ParseError:
-        message = "Invalid requirement: '{0}'" \
+        message = "Invalid requirements line: '{0}'" \
                   .format(requirement.strip())
         raise ValueError(message)
 
