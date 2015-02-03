@@ -30,13 +30,5 @@ SPACES: '[ \t\n]+' (%ignore) (%newline);
 def parse(requirements, g=grammar):
     """
     Parses given requirements and yields its AST.
-    >>> requirements = "flask==0.10.1"
-    >>> ast = parse(requirements)
-    >>> list(ast.select("package > name *"))
-    ['flask']
-    >>> list(ast.select("package > vspec > comparison *"))
-    ['==']
-    >>> list(ast.select("package > vspec > version *"))
-    ['0.10.1']
     """
     return g.parse(requirements)
