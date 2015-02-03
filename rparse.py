@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Copyright 2015, Dmitry Veselov
 
-from plyplus import Grammar
+from plyplus import Grammar, ParseError
 
 
 __all__ = [
@@ -10,7 +10,7 @@ __all__ = [
 
 
 grammar = Grammar(r"""
-start : package* ;
+start : package ;
 
 
 package: name vspec? ;
@@ -27,8 +27,17 @@ SPACES: '[ \t\n]+' (%ignore) (%newline);
 """)
 
 
-def parse(requirements, g=grammar):
+def _parse(requirement, g=grammar):
+    try:
+        return g.parse(requirement)
+    except ParseError:
+        message = "Invalid requirement: '{0}'" \
+                  .format(requirement.strip())
+        raise ValueError(message)
+
+
+def parse(requirements):
     """
-    Parses given requirements and yields its AST.
+    Parses given requirements line-by-line.
     """
-    return g.parse(requirements)
+    return map(_parse, filter(None, requirements.splitlines()))
