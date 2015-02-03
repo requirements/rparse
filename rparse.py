@@ -2,6 +2,12 @@
 # Copyright 2015, Dmitry Veselov
 
 from plyplus import Grammar, ParseError
+try:
+    # Python 2.x and pypy
+    from itertools import imap as map
+except ImportError:
+    # Python 3.x already have lazy map
+    pass
 
 
 __all__ = [
