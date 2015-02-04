@@ -6,6 +6,7 @@ from plyplus import Grammar, STransformer, \
 try:
     # Python 2.x and pypy
     from itertools import imap as map
+    from itertools import ifilter as filter
 except ImportError:
     # Python 3.x already have lazy map
     pass
