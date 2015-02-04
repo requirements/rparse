@@ -14,13 +14,13 @@ class RParseTestCase(unittest.TestCase):
         requirements = "flask==0.10.1"
         package, version = next(rparse.parse(requirements))
         self.assertEqual(package, "flask")
-        self.assertEqual(version, [('==', '0.10.1')])
+        self.assertEqual(version, [("==", "0.10.1")])
 
     def test_parse_multiple_versions(self):
         requirements = "flask>=0.10.1, <0.11"
         package, version = next(rparse.parse(requirements))
         self.assertEqual(package, "flask")
-        self.assertEqual(version, [('>=', '0.10.1'), ('<', '0.11')])
+        self.assertEqual(version, [(">=", "0.10.1"), ("<", "0.11")])
 
     def test_parse_invalid_requirements(self):
         requirements = """
@@ -32,4 +32,6 @@ class RParseTestCase(unittest.TestCase):
             next(ast)
         package, version = next(ast)
         self.assertEqual(package, "redis")
-        self.assertEqual(version, [('==', '1.0')])
+        self.assertEqual(version, [("==", "1.0")])
+        with self.assertRaises(ValueError, message="Invalid requirements line: 'flask=0.10.1'"):
+            next(rparse.parse("flask=0.10.1"))
