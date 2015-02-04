@@ -22,6 +22,17 @@ class RParseTestCase(unittest.TestCase):
         self.assertEqual(package, "flask")
         self.assertEqual(version, [(">=", "0.10.1"), ("<", "0.11")])
 
+    def test_parse_requirements_with_comments(self):
+        requirements = "flask==0.10.1 # latest version"
+        package, version = next(rparse.parse(requirements))
+        self.assertEqual(package, "flask")
+        requirements = "flask # latest version"
+        package, version = next(rparse.parse(requirements))
+        self.assertEqual(package, "flask")
+        self.assertEqual(version, None)
+        with self.assertRaises(StopIteration):
+            next(rparse.parse("# comment"))
+
     def test_parse_invalid_requirements(self):
         requirements = """
         flask 0.10.1
