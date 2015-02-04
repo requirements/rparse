@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2015, Dmitry Veselov
-
+from re import sub
 from plyplus import Grammar, STransformer, \
                     ParseError, TokenizeError
 try:
@@ -20,10 +20,9 @@ grammar = Grammar(r"""
 @start : package ;
 
 
-package: name vspec? ;
+package : name vspec? ;
 
 name : string ;
-
 vspec : comparison version (',' comparison version)* ;
 comparison : '<' | '<=' | '!=' | '==' | '>=' | '>' | '~=' | '===' ;
 version : string ;
@@ -58,8 +57,12 @@ class RTransformer(STransformer):
 
 
 def _parse(requirement, g=grammar):
+    requirement = sub(r"#.*", "", requirement)
     try:
-        return g.parse(requirement)
+        if requirement:
+            return g.parse(requirement)
+        else:
+            return None
     except (ParseError, TokenizeError):
         message = "Invalid requirements line: '{0}'" \
                   .format(requirement.strip())
@@ -71,4 +74,4 @@ def parse(requirements):
     Parses given requirements line-by-line.
     """
     transformer = RTransformer()
-    return map(transformer.transform, map(_parse, filter(None, requirements.splitlines())))
+    return map(transformer.transform, filter(None, map(_parse, requirements.splitlines())))
