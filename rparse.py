@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # Copyright 2015, Dmitry Veselov
 
-from plyplus import Grammar, STransformer, ParseError
+from plyplus import Grammar, STransformer, \
+                    ParseError, TokenizeError
 try:
     # Python 2.x and pypy
     from itertools import imap as map
@@ -59,7 +60,7 @@ class RTransformer(STransformer):
 def _parse(requirement, g=grammar):
     try:
         return g.parse(requirement)
-    except ParseError:
+    except (ParseError, TokenizeError):
         message = "Invalid requirements line: '{0}'" \
                   .format(requirement.strip())
         raise ValueError(message)
