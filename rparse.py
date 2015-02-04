@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Copyright 2015, Dmitry Veselov
 
-from plyplus import Grammar, ParseError
+from plyplus import Grammar, STransformer, ParseError
 try:
     # Python 2.x and pypy
     from itertools import imap as map
@@ -16,7 +16,7 @@ __all__ = [
 
 
 grammar = Grammar(r"""
-start : package ;
+@start : package ;
 
 
 package: name vspec? ;
@@ -33,6 +33,29 @@ SPACES: '[ \t\n]+' (%ignore) (%newline);
 """)
 
 
+class RTransformer(STransformer):
+
+    def package(self, node):
+        if len(node.tail) == 2:
+            name, vspec = node.tail
+        else:
+            name, vspec = node.tail[0], None
+        return name, vspec
+
+    def name(self, node):
+        return node.tail[0]
+
+    def vspec(self, node):
+        comparisons, versions = node.tail[0::2], node.tail[1::2]
+        return list(zip(comparisons, versions))
+
+    def comparison(self, node):
+        return node.tail[0]
+
+    def version(self, node):
+        return node.tail[0]
+
+
 def _parse(requirement, g=grammar):
     try:
         return g.parse(requirement)
@@ -46,4 +69,5 @@ def parse(requirements):
     """
     Parses given requirements line-by-line.
     """
-    return map(_parse, filter(None, requirements.splitlines()))
+    transformer = RTransformer()
+    return map(transformer.transform, map(_parse, filter(None, requirements.splitlines())))
