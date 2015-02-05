@@ -1,5 +1,4 @@
-# rparse [![Build 
-Status](https://travis-ci.org/dveselov/rparse.svg?branch=master)](https://travis-ci.org/dveselov/rparse)
+# rparse [![Build Status](https://travis-ci.org/dveselov/rparse.svg?branch=master)](https://travis-ci.org/dveselov/rparse)
 
 Python `requirements.txt` parser.
 
