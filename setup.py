@@ -9,7 +9,7 @@ def load_requirements():
 
 setup(name="rparse",
       version="0.1.0",
-      description="Python requirements.txt parser",
+      description="requirements.txt parser",
       author="Dmitry Veselov",
       author_email="d.a.veselov@yandex.ru",
       url="https://github.com/dveselov/rparse",
