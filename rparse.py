@@ -20,7 +20,7 @@ grammar = Grammar(r"""
 @start : package ;
 
 
-package : name extras? specs?;
+package : name extras? specs? comment?;
 name : string ;
 
 specs : comparison version (',' comparison version)* ;
@@ -30,6 +30,8 @@ version : string ;
 extras : '\[' (extra (',' extra)*)? '\]' ;
 extra : string ;
 
+comment : '\#.+' ;
+
 @string : '[-A-Za-z0-9_\.]+' ;
 
 SPACES: '[ \t\n]+' (%ignore) (%newline);
@@ -38,10 +40,11 @@ SPACES: '[ \t\n]+' (%ignore) (%newline);
 
 class Requirement(object):
 
-    def __init__(self, name=None, extras=None, specs=None):
+    def __init__(self, name=None, extras=None, specs=None, comment=None):
         self.name = name
         self.extras = extras
         self.specs = specs
+        self.comment = comment
 
     def __str__(self):
         return "<{0}(name='{1}'>".format(self.__class__.__name__, self.name)
@@ -74,17 +77,24 @@ class RTransformer(STransformer):
     def extra(self, node):
         return node.tail[0]
 
+    def comment(self, node):
+        return ("comment", " ".join([word for word in node.tail]))
 
-def _parse(requirement, g=grammar):
-    requirement = sub(r"#.*", "", requirement)
+    def comment_content(self, node):
+        return node.tail[0]
+
+
+def _parse(line, g=grammar):
+    line = line.strip()
+    if line.startswith("#"):
+        return None
     try:
-        if requirement:
-            return g.parse(requirement)
+        if line:
+            return g.parse(line)
         else:
             return None
     except (ParseError, TokenizeError):
-        message = "Invalid requirements line: '{0}'" \
-                  .format(requirement.strip())
+        message = "Invalid requirements line: '{0}'".format(line)
         raise ValueError(message)
 
 
