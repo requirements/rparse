@@ -16,17 +16,19 @@ __all__ = [
     "parse"
 ]
 
-
 grammar = Grammar(r"""
 @start : package ;
 
 
-package : name vspec? ;
-
+package : name extras? specs?;
 name : string ;
-vspec : comparison version (',' comparison version)* ;
+
+specs : comparison version (',' comparison version)* ;
 comparison : '<' | '<=' | '!=' | '==' | '>=' | '>' | '~=' | '===' ;
 version : string ;
+
+extras : '\[' (extra (',' extra)*)? '\]' ;
+extra : string ;
 
 @string : '[-A-Za-z0-9_\.]+' ;
 
@@ -34,26 +36,42 @@ SPACES: '[ \t\n]+' (%ignore) (%newline);
 """)
 
 
+class Requirement(object):
+
+    def __init__(self, name=None, extras=None, specs=None):
+        self.name = name
+        self.extras = extras
+        self.specs = specs
+
+    def __str__(self):
+        return "<{0}(name='{1}'>".format(self.__class__.__name__, self.name)
+
+
 class RTransformer(STransformer):
 
     def package(self, node):
-        if len(node.tail) == 2:
-            name, vspec = node.tail
-        else:
-            name, vspec = node.tail[0], None
-        return name, vspec
+        requirement = Requirement()
+        for key, value in node.tail:
+            setattr(requirement, key, value)
+        return requirement
 
     def name(self, node):
-        return node.tail[0]
+        return ("name", node.tail[0])
 
-    def vspec(self, node):
+    def specs(self, node):
         comparisons, versions = node.tail[0::2], node.tail[1::2]
-        return list(zip(comparisons, versions))
+        return ("specs", list(zip(comparisons, versions)))
 
     def comparison(self, node):
         return node.tail[0]
 
     def version(self, node):
+        return node.tail[0]
+
+    def extras(self, node):
+        return ("extras", [name for name in node.tail])
+
+    def extra(self, node):
         return node.tail[0]
 
 
