@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # Copyright 2015, Dmitry Veselov
-from re import sub
 from plyplus import Grammar, STransformer, \
                     ParseError, TokenizeError
 try:
