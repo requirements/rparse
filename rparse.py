@@ -79,10 +79,7 @@ class RTransformer(STransformer):
         return node.tail[0]
 
     def comment(self, node):
-        return ("comment", " ".join([word for word in node.tail]))
-
-    def comment_content(self, node):
-        return node.tail[0]
+        return ("comment", node.tail[0])
 
 
 def _parse(line, g=grammar):
