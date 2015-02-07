@@ -2,6 +2,12 @@
 
 Python `requirements.txt` parser.
 
+# Installation
+
+```bash
+$ pip install rparse
+```
+
 # Usage
 
 ```python
@@ -14,7 +20,7 @@ pip >= 6.0.0, < 6.0.7
 """
 
 for requirement in rparse.parse(requirements):
-    print(requirement)
+    print(requirement.name, requirement.specs)
 ```
 
 Output will be looks like this:
