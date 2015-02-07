@@ -33,6 +33,7 @@ class RParseTestCase(unittest.TestCase):
         requirements = "flask==0.10.1 # latest version"
         package = next(rparse.parse(requirements))
         self.assertEqual(package.name, "flask")
+        self.assertEqual(package.comment, "# latest version")
         requirements = "flask # latest version"
         package = next(rparse.parse(requirements))
         self.assertEqual(package.name, "flask")
