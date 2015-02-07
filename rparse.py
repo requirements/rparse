@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # Copyright 2015, Dmitry Veselov
+from __future__ import print_function
+from argparse import ArgumentParser
 from plyplus import Grammar, STransformer, \
                     ParseError, TokenizeError
 try:
@@ -103,3 +105,17 @@ def parse(requirements):
     """
     transformer = RTransformer()
     return map(transformer.transform, filter(None, map(_parse, requirements.splitlines())))
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("path", help="path to requirements.txt file")
+    args = parser.parse_args()
+    with open(args.path) as source:
+        requirements = source.read()
+        for requirement in parse(requirements):
+            print("Package: {0}".format(requirement.name))
+            print("Version Specifier: {0}".format(requirement.specs))
+            print("Extras: {0}".format(requirement.extras))
+            print("Comment: {0}".format(requirement.comment))
+            print("-" * 64)
