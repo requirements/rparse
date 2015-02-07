@@ -14,6 +14,7 @@ setup(name="rparse",
       author_email="d.a.veselov@yandex.ru",
       url="https://github.com/dveselov/rparse",
       py_modules=["rparse"],
+      scripts=["rparse.py"],
       install_requires=load_requirements(),
       classifiers=[
           "Intended Audience :: Developers",
