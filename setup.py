@@ -8,7 +8,7 @@ def load_requirements():
 
 
 setup(name="rparse",
-      version="0.1.0",
+      version="0.2.0",
       description="requirements.txt parser",
       author="Dmitry Veselov",
       author_email="d.a.veselov@yandex.ru",

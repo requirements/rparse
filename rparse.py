@@ -16,6 +16,8 @@ except ImportError:
 __all__ = [
     "parse"
 ]
+__version__ = "0.2.0"
+
 
 grammar = Grammar(r"""
 @start : package ;
