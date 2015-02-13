@@ -86,7 +86,7 @@ class RTransformer(STransformer):
 
 def _parse(line, g=grammar):
     line = line.strip()
-    if line.startswith("#"):
+    if line.startswith("#") or not line:
         return None
     try:
         return g.parse(line)
