@@ -89,10 +89,7 @@ def _parse(line, g=grammar):
     if line.startswith("#"):
         return None
     try:
-        if line:
-            return g.parse(line)
-        else:
-            return None
+        return g.parse(line)
     except (ParseError, TokenizeError):
         message = "Invalid requirements line: '{0}'".format(line)
         raise ValueError(message)
